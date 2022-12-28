@@ -3,14 +3,54 @@ import uuid from 'react-uuid';
 import Form from './Form'
 import Menu from './Menu'
 import unlock from '../images/unlock.svg'
+import lock from '../images/lock.svg'
 import edit from '../images/edit.svg'
 import del from '../images/del.svg'
 
 
 function All() {
   
-  const[taches, setTaches] = useState([])
+  const[taches, setTaches] = useState([
+    {id:uuid(), tache : 'Programmer', check: false, serure : false},
+    {id:uuid(), tache : 'Jouer a la ps4', check: false, serure : false},
+    {id:uuid(), tache : 'Voyager', check: false, serure : true},
+  ])
   const[modal, setModal] = useState(false)
+  const[modalChamp, setModalChamp] = useState(false)
+  const[alertSerure, setAlertSerure] = useState(false)
+
+  const alerte = () =>{
+
+
+    setAlertSerure(true)      
+
+  
+  }
+
+  const serure = (id)=>{
+    setTaches(
+      taches.map((i)=>{
+        if(i.id === id){
+          return {...i, serure : !i.serure}
+        }
+        if(i.serure === false){
+          setAlertSerure(false)
+        }
+        return i
+      })
+    )
+  }
+
+  const effacer = (id) =>{
+
+    setTaches(
+     
+      taches.filter((i)=>i.id !== id)  
+      
+    )
+     
+    
+  }
 
   const handleTaches = (val)=>{
 
@@ -21,7 +61,7 @@ function All() {
       if(tache.indexOf(val) === -1){
         
         setTaches(
-          [...taches, {id:uuid(), tache : val, check: false}]
+          [...taches, {id:uuid(), tache : val, check: false, serure : false}]
         )
         setModal(false)
       }
@@ -29,7 +69,10 @@ function All() {
       else{
         setModal(true)
       }
-
+      setModalChamp(false)
+    }
+    else{
+      setModalChamp(true)
     }
   } 
   
@@ -50,6 +93,16 @@ function All() {
   return (
     <>
       {
+        modalChamp === true 
+        
+        ? 
+          <div className="alert ets alert-warning" role="alert">
+            Champ vide !!<br />
+            Entrer une tache svp !
+          </div>
+        : <></>
+      }
+      {
         modal === true 
         
         ? 
@@ -60,7 +113,14 @@ function All() {
       }
       <Form handleTaches={handleTaches}/>  
       <Menu />
-
+      {
+        alertSerure === true 
+        ? <div class="alert alert-danger" role="alert">
+            Impossible de supprimer le composant secure activer<br />
+            veuillez le desactive si vous souhaitez supprimer la tache
+          </div>
+        : <></>
+      }
       <div className="tab-content" id="exContent">
         <div className="tab-pane fade show active" id="ex1Tabs1" role="tabpanel"
           aria-labelledby="exTab1">
@@ -83,13 +143,21 @@ function All() {
                       i.check === true ? (<s>{i.tache}</s>) : i.tache
                     }
                   </label>
-        
-                  <img src={unlock}className='ms-auto' alt='unclock' width={25}/>
+                  {
+                    i.serure === false ? <img src={unlock}className='ms-auto' alt='unlock' width={25} onClick={()=>serure(i.id)}/>
+
+                    : <img src={lock}className='ms-auto' alt='lock' width={25} onClick={()=>serure(i.id)}/>
+                
+                  }
+                
                   <img src={edit} alt='edit' width={25}/>
-                  <img src={del} alt='del' width={25}/>
+                  <img 
+                    src={del} 
+                    alt='del' 
+                    width={25}  
+                    onClick={i.serure === false?()=>effacer(i.id):alerte}
+                  />
                
-                 
-            
                 </li>
               )
             })}

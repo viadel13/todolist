@@ -11,6 +11,7 @@ function Form({handleTaches}) {
   const sendTache = (e)=>{
     e.preventDefault();
     handleTaches(tacheUser)
+    setTacheUser('')
   }
 
   return (

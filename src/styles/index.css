@@ -7,10 +7,14 @@
     background-blend-mode: screen, color-dodge, overlay, difference, normal;
 }
 
+img{
+    margin: 0 2px;
+}
 
 @media (max-width: 767px) {
     ul{
         display: flex;
         flex-direction: column;
     }
+
 }

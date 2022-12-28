@@ -16,8 +16,8 @@ function Form({handleTaches}) {
   return (
     <form className="mb-4" onSubmit={sendTache}>
         <div className="form-outline flex-fill">
-            <input type="text" className="form-control mb-4" value={tacheUser} onChange={handleTache} />
-            <input type="submit" className="btn btn-info" value='Ajouter' />
+            <input type="text" className="form-control mb-4" value={tacheUser} onChange={handleTache} maxLength='15' />
+            <input type="submit" className="btn btn-info" value='Ajouter'/>
         </div>
  
   </form>

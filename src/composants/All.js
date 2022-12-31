@@ -29,7 +29,7 @@ function All() {
     setAlertSerure(false)        
   }
 
-  const editer = (id,name)=>{
+  const editer = (id)=>{
     let newEdit = taches.find((i)=>{
       return i.id === id
     })
@@ -70,11 +70,7 @@ function All() {
 
     const tache = taches.map((i)=>i.tache)
     
-    if(!tacheUser){
-      alerte('hello')
-    }
-
-    else if(tacheUser && !toggle){
+    if(tacheUser && !toggle){
 
       setTaches(
           taches.map((i)=>{
@@ -84,7 +80,9 @@ function All() {
         return i
       })
       )
-    
+
+      setToggle(true)
+   
     }
     
     else{
@@ -197,7 +195,7 @@ function All() {
                     src={edit} 
                     alt='edit' 
                     width={25}
-                    onClick={()=>editer(i.id, i.tache)}
+                    onClick={()=>editer(i.id)}
                    
                   />
                   <img 

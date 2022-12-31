@@ -15,16 +15,30 @@ function All() {
     {id:uuid(), tache : 'Jouer a la ps4', check: false, serure : false},
     {id:uuid(), tache : 'Voyager', check: false, serure : true},
   ])
+  
+  const[tacheUser, setTacheUser] = useState('')
   const[modal, setModal] = useState(false)
   const[modalChamp, setModalChamp] = useState(false)
   const[alertSerure, setAlertSerure] = useState(false)
+  const[toggle, setToggle] = useState(true)
+  const[editItem, setEditItem] = useState(null)
+  
+
 
   const alerte = () =>{
+    setAlertSerure(false)        
+  }
 
+  const editer = (id,name)=>{
+    let newEdit = taches.find((i)=>{
+      return i.id === id
+    })
 
-    setAlertSerure(true)      
+    setToggle(false)
+    setTacheUser(newEdit.tache)
+    setEditItem(id)
 
-  
+ 
   }
 
   const serure = (id)=>{
@@ -55,25 +69,46 @@ function All() {
   const handleTaches = (val)=>{
 
     const tache = taches.map((i)=>i.tache)
- 
-    if(val !== ''){
-      
-      if(tache.indexOf(val) === -1){
-        
-        setTaches(
-          [...taches, {id:uuid(), tache : val, check: false, serure : false}]
-        )
-        setModal(false)
-      }
+    
+    if(!tacheUser){
+      alerte('hello')
+    }
 
-      else{
-        setModal(true)
-      }
-      setModalChamp(false)
+    else if(tacheUser && !toggle){
+
+      setTaches(
+          taches.map((i)=>{
+        if(i.id === editItem){
+          return{...i, tache : tacheUser}
+        }
+        return i
+      })
+      )
+    
     }
+    
     else{
-      setModalChamp(true)
+      
+      if(val !== ''){
+      
+        if(tache.indexOf(val) === -1){
+          
+          setTaches(
+            [...taches, {id:uuid(), tache : val, check: false, serure : false}]
+          )
+          setModal(false)
+        }
+
+        else{
+          setModal(true)
+        }
+        setModalChamp(false)
+      }
+      else{
+        setModalChamp(true)
+      }
     }
+    
   } 
   
   const handleCheck = (id) =>{
@@ -89,9 +124,10 @@ function All() {
     )   
 
   }
- 
+
   return (
     <>
+  
       {
         modalChamp === true 
         
@@ -111,7 +147,13 @@ function All() {
           </div>
         : <></>
       }
-      <Form handleTaches={handleTaches}/>  
+      <Form 
+        handleTaches={handleTaches}
+        tacheUser={tacheUser}
+        setTacheUser={setTacheUser}
+        toggle={toggle}
+
+      />  
       <Menu />
       {
         alertSerure === true 
@@ -150,7 +192,14 @@ function All() {
                 
                   }
                 
-                  <img src={edit} alt='edit' width={25}/>
+                  <img 
+                    
+                    src={edit} 
+                    alt='edit' 
+                    width={25}
+                    onClick={()=>editer(i.id, i.tache)}
+                   
+                  />
                   <img 
                     src={del} 
                     alt='del' 

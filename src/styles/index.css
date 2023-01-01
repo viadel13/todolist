@@ -18,5 +18,8 @@ img{
         display: flex;
         flex-direction: column;
     }
+}
 
+#progress{
+    height: 50em;
 }

@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import uuid from 'react-uuid';
 import Form from './Form'
 import Menu from './Menu'
@@ -22,8 +22,18 @@ function All() {
   const[alertSerure, setAlertSerure] = useState(false)
   const[toggle, setToggle] = useState(true)
   const[editItem, setEditItem] = useState(null)
-  
+  const[load, setLoad] = useState(null)
 
+  
+  useEffect(()=>{
+
+    setLoad(true)
+
+    setTimeout(()=>{
+      setLoad(false)
+    }, 2000)
+
+  }, [])
 
   const alerte = () =>{
     setAlertSerure(false)        
@@ -123,9 +133,12 @@ function All() {
 
   }
 
+  const s = alertSerure
+  console.log(s)
+
   return (
     <>
-  
+
       {
         modalChamp === true 
         
@@ -152,67 +165,78 @@ function All() {
         toggle={toggle}
 
       />  
+
       <Menu />
+      
       {
-        alertSerure === true 
-        ? <div class="alert alert-danger" role="alert">
-            Impossible de supprimer le composant secure activer<br />
-            veuillez le desactive si vous souhaitez supprimer la tache
-          </div>
-        : <></>
-      }
-      <div className="tab-content" id="exContent">
-        <div className="tab-pane fade show active" id="ex1Tabs1" role="tabpanel"
-          aria-labelledby="exTab1">
-
-          <ul className="list-group mb-0">
-
-            {taches.map((i)=>{
-              return(
-                <li key={i.id} className="list-group-item d-flex align-items-center border-0 mb-4 rounded"
-                  style={{backgroundColor: '#d4e7f1'}}>
-                  
-                  <input 
-                    className="form-check-input" 
-                    type="checkbox" value={i.tache} 
-                    onClick={()=>handleCheck(i.id)}
-                  />
-             
-                  <label className="form-check-label ms-2">
-                    {
-                      i.check === true ? (<s>{i.tache}</s>) : i.tache
-                    }
-                  </label>
-                  {
-                    i.serure === false ? <img src={unlock}className='ms-auto' alt='unlock' width={25} onClick={()=>serure(i.id)}/>
-
-                    : <img src={lock}className='ms-auto' alt='lock' width={25} onClick={()=>serure(i.id)}/>
-                
-                  }
-                
-                  <img 
-                    
-                    src={edit} 
-                    alt='edit' 
-                    width={25}
-                    onClick={()=>editer(i.id)}
-                   
-                  />
-                  <img 
-                    src={del} 
-                    alt='del' 
-                    width={25}  
-                    onClick={i.serure === false?()=>effacer(i.id):alerte}
-                  />
-               
-                </li>
-              )
-            })}
-
-          </ul>
-
+        load 
+        
+        ?
+        
+        <div className="d-flex justify-content-center">
+            <div className="spinner-grow text-warning" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
         </div>
-      </div>
+
+        :
+
+        <div className="tab-content" id="exContent">
+          <div className="tab-pane fade show active" id="ex1Tabs1" role="tabpanel"
+            aria-labelledby="exTab1">
+         
+            <ul className="list-group mb-0">
+
+              {taches.map((i)=>{
+                return(
+                  <li key={i.id} className="list-group-item d-flex align-items-center border-0 mb-4 rounded"
+                    style={{backgroundColor: '#d4e7f1'}}>
+                    
+                    <input 
+                      className="form-check-input" 
+                      type="checkbox" value={i.tache} 
+                      onClick={()=>handleCheck(i.id)}
+                    />
+              
+                    <label className="form-check-label ms-2">
+                      {
+                        i.check === true ? (<s>{i.tache}</s>) : i.tache
+                      }
+                    </label>
+
+                    {
+                      i.serure === false ? <img src={unlock}className='ms-auto' alt='unlock' width={25} onClick={()=>serure(i.id)}/>
+
+                      : <img src={lock}className='ms-auto' alt='lock' width={25} onClick={()=>serure(i.id)}/>
+                  
+                    }
+                  
+                    <img 
+                      
+                      src={edit} 
+                      alt='edit' 
+                      width={25}
+                      onClick={()=>editer(i.id)}
+                    
+                    />
+
+                    <img 
+                      src={del} 
+                      alt='del' 
+                      width={25}  
+                      onClick={i.serure === false?()=>effacer(i.id):alerte}
+                    />
+                
+                  </li>
+                )
+              })}
+
+            </ul>
+         
+          </div>
+        </div>
+      }
+  
     </>
   )
 }

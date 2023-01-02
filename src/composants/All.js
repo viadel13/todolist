@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import uuid from 'react-uuid';
+import uuid from 'react-uuid'
 import Form from './Form'
 import Menu from './Menu'
 import unlock from '../images/unlock.svg'
@@ -8,21 +8,17 @@ import edit from '../images/edit.svg'
 import del from '../images/del.svg'
 
 
-function All() {
+function All({taches, setTaches}) {
   
-  const[taches, setTaches] = useState([
-    {id:uuid(), tache : 'Programmer', check: false, serure : false},
-    {id:uuid(), tache : 'Jouer a la ps4', check: false, serure : false},
-    {id:uuid(), tache : 'Voyager', check: false, serure : true},
-  ])
+ 
   
   const[tacheUser, setTacheUser] = useState('')
   const[modal, setModal] = useState(false)
-  const[modalChamp, setModalChamp] = useState(false)
   const[alertSerure, setAlertSerure] = useState(false)
   const[toggle, setToggle] = useState(true)
   const[editItem, setEditItem] = useState(null)
   const[load, setLoad] = useState(null)
+  // const[checked, setChecked] = useState(true)
 
   
   useEffect(()=>{
@@ -110,27 +106,39 @@ function All() {
         else{
           setModal(true)
         }
-        setModalChamp(false)
+
       }
-      else{
-        setModalChamp(true)
-      }
+ 
     }
     
   } 
   
-  const handleCheck = (id) =>{
+  // const handleCheck = (id) =>{
+   
+  //   setTaches(
+  //     taches.map((i)=>{
+  //       if(i.id === id){
+  //         return {...i, check:!i.check} 
+            
+  //       }
 
+  //       return i
+  //     })
+  //   )   
+
+  // }
+
+  const handleCheck = (e) =>{
+    const{name, checked} = e.target;
     setTaches(
       taches.map((i)=>{
-        if(i.id === id){
-          return {...i, check:!i.check}
+        if(i.tache === name){
+          return {...i, check:checked}
         }
-
         return i
       })
-    )   
-
+    )
+     
   }
 
   const s = alertSerure
@@ -138,17 +146,6 @@ function All() {
 
   return (
     <>
-
-      {
-        modalChamp === true 
-        
-        ? 
-          <div className="alert ets alert-warning" role="alert">
-            Champ vide !!<br />
-            Entrer une tache svp !
-          </div>
-        : <></>
-      }
       {
         modal === true 
         
@@ -194,14 +191,17 @@ function All() {
                     
                     <input 
                       className="form-check-input" 
-                      type="checkbox" value={i.tache} 
-                      onClick={()=>handleCheck(i.id)}
+                      type="checkbox" 
+                      name={i.tache} 
+                      // onClick={()=>handleCheck(i.id)}
+                      onChange={handleCheck}
+              
                     />
               
                     <label className="form-check-label ms-2">
-                      {
-                        i.check === true ? (<s>{i.tache}</s>) : i.tache
-                      }
+                    {
+                      i.check ? <s>{i.tache}</s> : i.tache
+                    }
                     </label>
 
                     {

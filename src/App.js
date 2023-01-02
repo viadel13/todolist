@@ -1,4 +1,4 @@
-import React from 'react'
+import uuid from 'react-uuid'
 import { Switch, Route } from 'react-router-dom'
 import {useState, useEffect} from 'react'
 import All from './composants/All'
@@ -8,7 +8,12 @@ import Error from './composants/Error'
 
 
 function App() {
-  
+
+  const[taches, setTaches] = useState([
+    {id:uuid(), tache : 'Programmer', check: false, serure : false},
+    {id:uuid(), tache : 'Jouer a la ps4', check: false, serure : false},
+    {id:uuid(), tache : 'Voyager', check: false, serure : true},
+  ])
   const[loader, setLoader] = useState(null)
   const[compteur, setCompteur] = useState(0)
 
@@ -45,9 +50,15 @@ function App() {
               <div className='card'>
                 <div className='card-body p-5'>
                   <Switch>
-                    <Route exact path="/" component={All} />
-                    <Route path="/Active" component={Active} />
-                    <Route path="/Completed" component={Completed} />
+                    <Route exact path="/">
+                      <All taches={taches} setTaches={setTaches}/>
+                    </Route>
+                    <Route path="/Active">
+                      <Active taches={taches} />
+                    </Route>
+                    <Route path="/Completed">
+                      <Completed taches={taches}  />
+                    </Route>
                     <Route component={Error} />
                   </Switch>
                 </div>
